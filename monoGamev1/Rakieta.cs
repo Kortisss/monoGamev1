@@ -10,26 +10,37 @@ namespace monoGamev1
 {
     class Rakieta
     {
+        private int nrKlatki;
+        private Rectangle klatka;
         private readonly Microsoft.Xna.Framework.Graphics.Texture2D texture;
         private Vector2 position;
+        private int szerokoscKlatki; 
 
-        public Rakieta(Microsoft.Xna.Framework.Graphics.Texture2D texture)
+        public Rakieta(Microsoft.Xna.Framework.Graphics.Texture2D texture, int nrKlatki = 0)
         {
             position = new Vector2(210, 480);
             this.texture = texture;
+
+            szerokoscKlatki = texture.Width / 6;
+            klatka = new Rectangle(0 * szerokoscKlatki, 0, szerokoscKlatki, texture.Height);
+
         }
 
-        public void Draw(Microsoft.Xna.Framework.Graphics.Texture2D rakieta, Microsoft.Xna.Framework.Graphics.SpriteBatch spriteBatch)
+        public void Draw(Microsoft.Xna.Framework.Graphics.Texture2D texture, Microsoft.Xna.Framework.Graphics.SpriteBatch spriteBatch)
         {
             Rectangle rectGracza = new Rectangle(
                         (int)GetPosition().X,
                         (int)GetPosition().Y,
-                        rakieta.Width,
-                        rakieta.Height);
+                        texture.Width,
+                        texture.Height);
 
-            spriteBatch.Draw(rakieta, rectGracza, Color.White);
+            nrKlatki++;
+            klatka = new Rectangle(nrKlatki * szerokoscKlatki, 0, szerokoscKlatki, texture.Height);
+            rectGracza = new Rectangle((int)position.X, (int)position.Y, klatka.Width, klatka.Height);
 
-
+            spriteBatch.Draw(texture, rectGracza, klatka, Color.White);
+            if (nrKlatki == 5)
+                nrKlatki = 0;
         }
 
         public Vector2 GetPosition()
