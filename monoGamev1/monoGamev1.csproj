@@ -97,6 +97,7 @@
     <Compile Include="GamePage.xaml.cs">
       <DependentUpon>GamePage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Meteor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rakieta.cs" />
   </ItemGroup>

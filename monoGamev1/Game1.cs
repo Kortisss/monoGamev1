@@ -11,11 +11,12 @@ namespace monoGamev1
 {
     public class Game1 : Game
     {
-        private GraphicsDeviceManager _graphics;
+        private readonly GraphicsDeviceManager _graphics;
         private Microsoft.Xna.Framework.Graphics.SpriteBatch spriteBatch;
 
         private Rakieta gracz;
-        private Texture2D control, texture, tlo;
+        private Meteor meteor1, meteor2;
+        private Texture2D control, teksturaRakiety, tlo, teksturaMeteor;
 
         public Game1()
         {
@@ -35,15 +36,14 @@ namespace monoGamev1
         {
             spriteBatch = new Microsoft.Xna.Framework.Graphics.SpriteBatch(GraphicsDevice);
 
-            texture = Content.Load<Texture2D>("AnimRakiety");
+            teksturaRakiety = Content.Load<Texture2D>("AnimRakiety");
+            teksturaMeteor = Content.Load<Texture2D>("meteor");
             control = Content.Load<Texture2D>("control");
             tlo = Content.Load<Texture2D>("niebo");
 
-            
-
-
-
-            gracz = new Rakieta(texture);
+            gracz = new Rakieta(teksturaRakiety);
+            meteor1 = new Meteor(teksturaMeteor);
+            meteor2 = new Meteor(teksturaMeteor);
         }
 
         protected override void Update(GameTime gameTime)
@@ -86,6 +86,7 @@ namespace monoGamev1
                 Debug.WriteLine("No key pressed");
 
 
+
             /*
              TouchCollection mscaDotkniete = TouchPanel.GetState();
 
@@ -111,6 +112,9 @@ namespace monoGamev1
 
             //gracz.MoveU();
 
+            meteor1.Update();
+            meteor2.Update();
+
             base.Update(gameTime);
         }
 
@@ -120,8 +124,11 @@ namespace monoGamev1
 
             spriteBatch.Begin();
             spriteBatch.Draw(tlo, new Rectangle(0,0,480,800), Color.White);
+            gracz.Draw(teksturaRakiety, spriteBatch);
+            meteor1.Draw(teksturaMeteor, spriteBatch);
+            meteor2.Draw(teksturaMeteor, spriteBatch);
+
             spriteBatch.Draw(control, new Vector2(0, 583), Color.White);
-            gracz.Draw(texture, spriteBatch);
             spriteBatch.End();
 
             base.Draw(gameTime);

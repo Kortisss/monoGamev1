@@ -10,13 +10,13 @@ namespace monoGamev1
 {
     class Rakieta
     {
-        private int nrKlatki;
+        private int nrKlatki = 0;
         private Rectangle klatka;
         private readonly Microsoft.Xna.Framework.Graphics.Texture2D texture;
         private Vector2 position;
-        private int szerokoscKlatki; 
+        private readonly int szerokoscKlatki;
 
-        public Rakieta(Microsoft.Xna.Framework.Graphics.Texture2D texture, int nrKlatki = 0)
+        public Rakieta(Microsoft.Xna.Framework.Graphics.Texture2D texture)
         {
             position = new Vector2(210, 480);
             this.texture = texture;
@@ -36,10 +36,11 @@ namespace monoGamev1
 
             nrKlatki++;
             klatka = new Rectangle(nrKlatki * szerokoscKlatki, 0, szerokoscKlatki, texture.Height);
+            nrKlatki++;
             rectGracza = new Rectangle((int)position.X, (int)position.Y, klatka.Width, klatka.Height);
 
             spriteBatch.Draw(texture, rectGracza, klatka, Color.White);
-            if (nrKlatki == 5)
+            if (nrKlatki == 6)
                 nrKlatki = 0;
         }
 
@@ -68,7 +69,7 @@ namespace monoGamev1
             {
                 position.Y -= 5;
             }
-            
+
         }
         public void MoveD()
         {
