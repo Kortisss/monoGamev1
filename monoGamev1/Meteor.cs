@@ -23,7 +23,9 @@ namespace monoGamev1
         {
             this.texture = texture;
             position = new Vector2(generujLL.Next(100, 400), 0);
-            szerokoscKlatki = texture.Width / 3;   
+            szerokoscKlatki = texture.Width / 3;
+            predkosc.X = generujLL.Next(-13, 13);
+            predkosc.Y = generujLL.Next(1, 13);
 
         }
 
@@ -74,6 +76,21 @@ namespace monoGamev1
             predkosc.X = 0;
             predkosc.Y = 0;
         }
+        public Rectangle Kolizja(Rakieta gracz)
+        {
+            Rectangle graczRectangle = new Rectangle(
+                        (int)gracz.GetPosition().X,
+                        (int)gracz.GetPosition().Y,
+                        (int)gracz.GetSize().X,
+                        (int)gracz.GetSize().Y
+                        );
+            return graczRectangle;
+        }
+        public Vector2 GetSize()
+        {
+            return new Vector2(texture.Width / 6, texture.Height);
+        }
+
 
         public Vector2 GetPosition()
         {

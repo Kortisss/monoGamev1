@@ -44,6 +44,22 @@ namespace monoGamev1
                 nrKlatki = 0;
         }
 
+        public Vector2 GetSize()
+        {
+            return new Vector2(texture.Width / 6, texture.Height);
+        }
+
+        public Rectangle Kolizja(Meteor meteor)
+        {
+            Rectangle meteorRectangle = new Rectangle(
+                        (int)meteor.GetPosition().X,
+                        (int)meteor.GetPosition().Y,
+                        (int)meteor.GetSize().X,
+                        (int)meteor.GetSize().Y
+                        );
+            return meteorRectangle;
+        }
+
         public Vector2 GetPosition()
         {
             return position;
@@ -51,32 +67,28 @@ namespace monoGamev1
 
         public void MoveL()
         {
-            if (0 <= position.X || position.X <= 400)
-            {
-                position.X -= 5;
-            }
+            position.X -= 5;
+            if (position.X <= 0)
+                position.X = 0;
         }
         public void MoveR()
         {
-            if (0 <= position.X || position.X <= 400)
-            {
-                position.X += 5;
-            }
+            position.X += 5;
+            if (position.X >= 405)
+                position.X = 405;
         }
         public void MoveU()
         {
-            if (0 <= position.Y || position.Y <= 477)
-            {
-                position.Y -= 5;
-            }
+            position.Y -= 5;
+            if (position.Y <= 0)
+                position.Y = 0;
 
         }
         public void MoveD()
         {
-            if (0 <= position.Y || position.Y <= 477)
-            {
-                position.Y += 5;
-            }
+            position.Y += 5;
+            if (position.Y >= 480)
+                position.Y = 480;
         }
     }
 }

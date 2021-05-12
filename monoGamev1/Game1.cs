@@ -6,6 +6,7 @@ using SharpDX.Direct2D1;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
+using Windows.UI.ViewManagement;
 
 namespace monoGamev1
 {
@@ -15,8 +16,10 @@ namespace monoGamev1
         private Microsoft.Xna.Framework.Graphics.SpriteBatch spriteBatch;
 
         private Rakieta gracz;
-        private Meteor meteor1, meteor2;
+
         private Texture2D control, teksturaRakiety, tlo, teksturaMeteor;
+
+        List<Meteor> meteory = new List<Meteor>();
 
         public Game1()
         {
@@ -27,9 +30,11 @@ namespace monoGamev1
 
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
-
             base.Initialize();
+            _graphics.IsFullScreen = false;
+            _graphics.PreferredBackBufferWidth = 480;
+            _graphics.PreferredBackBufferHeight = 800;
+            _graphics.ApplyChanges();
         }
 
         protected override void LoadContent()
@@ -41,9 +46,13 @@ namespace monoGamev1
             control = Content.Load<Texture2D>("control");
             tlo = Content.Load<Texture2D>("niebo");
 
+            
+
+            for (int i = 0; i < 3; i++)
+                meteory.Add(new Meteor(teksturaMeteor));
+
             gracz = new Rakieta(teksturaRakiety);
-            meteor1 = new Meteor(teksturaMeteor);
-            meteor2 = new Meteor(teksturaMeteor);
+
         }
 
         protected override void Update(GameTime gameTime)
@@ -112,8 +121,18 @@ namespace monoGamev1
 
             //gracz.MoveU();
 
-            meteor1.Update();
-            meteor2.Update();
+            foreach (Meteor meteor in meteory)
+            {
+                meteor.Update();
+
+                if (meteor.Kolizja(gracz).Intersects(gracz.Kolizja(meteor)))
+                {
+                    
+                }
+
+            }
+                
+                
 
             base.Update(gameTime);
         }
@@ -125,8 +144,11 @@ namespace monoGamev1
             spriteBatch.Begin();
             spriteBatch.Draw(tlo, new Rectangle(0,0,480,800), Color.White);
             gracz.Draw(teksturaRakiety, spriteBatch);
-            meteor1.Draw(teksturaMeteor, spriteBatch);
-            meteor2.Draw(teksturaMeteor, spriteBatch);
+
+            foreach(Meteor meteor in meteory)
+            {
+                meteor.Draw(teksturaMeteor, spriteBatch);
+            }
 
             spriteBatch.Draw(control, new Vector2(0, 583), Color.White);
             spriteBatch.End();
