@@ -18,6 +18,8 @@ namespace monoGamev1
         private Vector2 position, predkosc;
         private readonly int szerokoscKlatki;
 
+        
+
         Random generujLL = new Random();
         public Meteor(Microsoft.Xna.Framework.Graphics.Texture2D texture)
         {
@@ -44,7 +46,7 @@ namespace monoGamev1
             
             klatka = new Rectangle(nrKlatki * szerokoscKlatki, 0, szerokoscKlatki, texture.Height);
             //nrKlatki++;
-            ileCykli++;
+            
             rectMeteor = new Rectangle((int)position.X, (int)position.Y, klatka.Width, klatka.Height);
 
             spriteBatch.Draw(texture, rectMeteor, klatka, Color.White);
@@ -54,6 +56,7 @@ namespace monoGamev1
 
         public void Update()
         {
+            ileCykli++;
             if (ileCykli == 8)
             {
                 nrKlatki++;
@@ -76,15 +79,26 @@ namespace monoGamev1
             predkosc.X = 0;
             predkosc.Y = 0;
         }
-        public Rectangle Kolizja(Rakieta gracz)
+        public List<Rectangle> Kolizja(Rakieta gracz)
         {
+            List<Rectangle> listaKolizji = new List<Rectangle>();
+
             Rectangle graczRectangle = new Rectangle(
                         (int)gracz.GetPosition().X,
                         (int)gracz.GetPosition().Y,
                         (int)gracz.GetSize().X,
                         (int)gracz.GetSize().Y
                         );
-            return graczRectangle;
+            Rectangle pocisk = new Rectangle(
+                        (int)gracz.PozycjaPocisku().X,
+                        (int)gracz.PozycjaPocisku().Y,
+                        20,
+                        50
+                        );
+            listaKolizji.Add(graczRectangle);
+            listaKolizji.Add(pocisk);
+
+            return listaKolizji;
         }
         public Vector2 GetSize()
         {
@@ -95,6 +109,6 @@ namespace monoGamev1
         public Vector2 GetPosition()
         {
             return position;
-        }//zrobione do 21 pkt
+        }
     }
 }

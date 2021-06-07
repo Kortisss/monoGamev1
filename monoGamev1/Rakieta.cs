@@ -12,29 +12,51 @@ namespace monoGamev1
     {
         private int nrKlatki = 0;
         private Rectangle klatka;
-        private readonly Microsoft.Xna.Framework.Graphics.Texture2D texture;
+        private readonly Microsoft.Xna.Framework.Graphics.Texture2D texture, pocisk2D;
         private Vector2 position;
         private readonly int szerokoscKlatki;
 
-        public Rakieta(Microsoft.Xna.Framework.Graphics.Texture2D texture)
+        private Pocisk strzal;
+
+        private struct Pocisk
+        {
+            public Vector2 position;
+            public bool wystrzelony;
+            public Vector2 predkosc;
+        }
+
+        Random generujLL = new Random();
+
+        public Rakieta(Microsoft.Xna.Framework.Graphics.Texture2D texture, Microsoft.Xna.Framework.Graphics.Texture2D pocisk2D)
         {
             position = new Vector2(210, 480);
             this.texture = texture;
+            this.pocisk2D = pocisk2D;
+
+            
 
             szerokoscKlatki = texture.Width / 6;
             klatka = new Rectangle(0 * szerokoscKlatki, 0, szerokoscKlatki, texture.Height);
 
+            strzal = new Pocisk();
+            strzal.position.X = (int)GetPosition().X;
+            strzal.position.Y = (int)GetPosition().Y;
+            strzal.predkosc.Y = generujLL.Next(3, 13);
+            strzal.wystrzelony = false;
         }
 
-        public void Draw(Microsoft.Xna.Framework.Graphics.Texture2D texture, Microsoft.Xna.Framework.Graphics.SpriteBatch spriteBatch)
+        public void Draw(Microsoft.Xna.Framework.Graphics.Texture2D texture, Microsoft.Xna.Framework.Graphics.Texture2D teksturaPocisk, Microsoft.Xna.Framework.Graphics.SpriteBatch spriteBatch)
         {
             Rectangle rectGracza = new Rectangle(
                         (int)GetPosition().X,
                         (int)GetPosition().Y,
                         texture.Width,
                         texture.Height);
+                
 
-            nrKlatki++;
+            if (strzal.wystrzelony)
+                spriteBatch.Draw(teksturaPocisk, strzal.position, Color.White); 
+
             klatka = new Rectangle(nrKlatki * szerokoscKlatki, 0, szerokoscKlatki, texture.Height);
             nrKlatki++;
             rectGracza = new Rectangle((int)position.X, (int)position.Y, klatka.Width, klatka.Height);
@@ -59,6 +81,7 @@ namespace monoGamev1
                         );
             return meteorRectangle;
         }
+
 
         public Vector2 GetPosition()
         {
@@ -89,6 +112,29 @@ namespace monoGamev1
             position.Y += 5;
             if (position.Y >= 480)
                 position.Y = 480;
+        }
+
+        public void Wystrzel()
+        {
+            if (!strzal.wystrzelony)
+            {
+                strzal.wystrzelony = true;
+                strzal.position.X = (int)GetPosition().X;
+                strzal.position.Y = (int)GetPosition().Y;
+            }
+                
+        }
+
+        public Vector2 PozycjaPocisku()
+        {
+            return strzal.position;
+        }
+        public void LotPociskuUpdate()
+        {
+            strzal.position.Y -= strzal.predkosc.Y;
+
+            if (strzal.position.Y < 0)
+                strzal.wystrzelony = false;
         }
     }
 }
